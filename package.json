@@ -1,0 +1,28 @@
+{
+  "name": "mcp-roster",
+  "version": "0.1.0",
+  "description": "人物名册 MCP：只登记私聊好友，默认拒绝，给别的工具当权限来源",
+  "type": "module",
+  "bin": {
+    "mcp-roster": "src/index.js"
+  },
+  "main": "src/index.js",
+  "files": ["src", "README.md", "TROUBLESHOOTING.md", "LICENSE"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "import-friends": "node scripts/import-friends.mjs"
+  },
+  "keywords": ["mcp", "model-context-protocol", "roster", "allowlist", "qq", "ai-agent"],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.8"
+  },
+  "author": "HOHOLI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoholi-668/mcp-roster.git"
+  }
+}
