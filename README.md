@@ -66,23 +66,38 @@ roster.json  →  谁能私聊我 / 谁能看我空间 / 谁只能正经说话
 
 ---
 
-## 快速开始
+## 安装（从 GitHub）
+
+> **本项目没有发布到 npm，而且 npm 上的 `mcp-roster` 是别人的包**
+> ——`npx mcp-roster` 会装到不相干的东西上，别用。
 
 ```bash
+git clone https://github.com/hoholi-668/mcp-roster.git
+cd mcp-roster
 npm install
-ROSTER_FILE=~/.dsh/roster.json npm start
+ROSTER_FILE=~/.dsh/roster.json node src/index.js
 ```
 
 接进 MCP 客户端：
 
 ```yaml
 - id: mcp-roster
-  name: '@deepseek-ai/dsh-mcp'
+  name: '@deepseek-ai/dsh-mcp-client'
   config:
-    command: npx
-    args: ['-y', 'mcp-roster']
+    serverName: roster
+    transport: stdio
+    command: node
+    args: ['/绝对路径/mcp-roster/src/index.js']
     env:
       ROSTER_FILE: /root/.dsh/roster.json
+```
+
+### 第一次用怎么开口
+
+```
+你认识谁？都叫什么
+记住小王：他是同事，说话随便点
+他能不能看我空间？
 ```
 
 ## 从桥接迁移
