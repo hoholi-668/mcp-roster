@@ -157,3 +157,25 @@ const { uins } = await callTool('roster_allowlist', { scope: 'qzone' });
 ## 许可
 
 MIT © 2026 HOHOLI
+
+## 兼容范围
+
+| 项 | 要求 | 实测情况 |
+|---|---|---|
+| **操作系统** | Linux / Windows / macOS | 纯 JS、无平台依赖；Linux 实测 |
+| **Node.js** | `>= 20` | 20 / 22 / 24 |
+| **外部依赖** | 无 | 只读写一个 JSON 文件 |
+
+### AI 客户端
+
+| 客户端 | 状态 |
+|---|---|
+| DSH 0.1.x / 0.2.x | ✅ 实测 |
+| 其它 MCP 客户端 | 🟡 推断可用（纯文本返回） |
+
+### 自测你的环境
+
+```bash
+node --test                          # 单测（10 项）
+node scripts/selftest-mcp.mjs        # 协议层（13 项）
+```
