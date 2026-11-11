@@ -28,6 +28,23 @@ so non-MCP code can read it directly.
 | `roster_check` | Ask "may this person do X?" (default deny) |
 | `roster_allowlist` | Export the allowlist other tools consume |
 
+## FAQ
+
+**Why not just write names in the system prompt?**
+A prompt is not queryable or enforceable. A roster is structured, shared by every tool, and defaults to deny — so a missing entry fails closed.
+
+**Is default-deny too strict?**
+It is the point. Add a person explicitly (`roster_upsert`) and tools can then ask `roster_check`.
+
+**What can I store?**
+Relationship tier, notes/impressions, permission tags, timestamps.
+
+**Where is the data?**
+A local JSON file you own. No cloud, no account.
+
+**Can it work with the QZone server?**
+Yes — that server can call `roster_check` to decide whether an action is allowed.
+
 ## License
 
 MIT
@@ -292,6 +309,23 @@ test/          node:test
 MIT © 2026 HOHOLI
 
 ---
+
+### FAQ
+
+**和直接在 prompt 里写人名有什么区别？**
+prompt 不可查询、不可强制。名册是结构化的，所有工具共享，而且**默认拒绝**——漏登记就失败关闭。
+
+**默认拒绝会不会太严？**
+这就是设计目的。显式 `roster_upsert` 之后，工具再调 `roster_check` 判断。
+
+**能存什么？**
+关系分层、备注/印象、权限标签、时间。
+
+**数据在哪？**
+本地 JSON，你自己的文件，不上云。
+
+**能和 qzone 插件配合吗？**
+能。那边可以调 `roster_check` 决定动作是否放行。
 
 ## 检索关键词（给搜索引擎）
 
