@@ -1,15 +1,42 @@
 # mcp-roster
 
-> 一份 `roster.json` 回答「这个人是谁、能不能对他做某事」——
-> **默认拒绝**，给别的工具当唯一权限来源。
+<p>
+  <a href="https://github.com/hoholi-668/mcp-roster/actions"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/hoholi-668/mcp-roster/test.yml?branch=main&label=CI&style=flat-square"></a>
+  <img alt="node" src="https://img.shields.io/badge/node-%3E%3D20-4b6fff?style=flat-square">
+  <img alt="license" src="https://img.shields.io/badge/license-MIT-263146?style=flat-square">
+</p>
 
-[![CI](https://img.shields.io/github/actions/workflow/status/hoholi-668/mcp-roster/test.yml?branch=main&label=CI)](https://github.com/hoholi-668/mcp-roster/actions)
-[![node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](package.json)
-[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+**English** · [中文文档](#中文文档)
+
+> **One `roster.json` answers "who is this person, and may I do X to them?"** — default deny,
+> and every other tool can use it as the single source of truth for permissions.
+
+**Use this if you** are tired of hard-coding allowlists in ten places, or you want an agent to
+remember *who* someone is (colleague / stranger / close friend) and act accordingly.
+
+**Works with:** any MCP client (DSH, Claude Desktop, Cursor, Cline). It is also a plain JSON file,
+so non-MCP code can read it directly.
+
+## Tools
+
+| Tool | What it does |
+|---|---|
+| `roster_list` / `roster_get` | Read the roster |
+| `roster_upsert` | Add or update a person |
+| `roster_note` | Attach a note/impression |
+| `roster_remove` | Remove a person |
+| `roster_check` | Ask "may this person do X?" (default deny) |
+| `roster_allowlist` | Export the allowlist other tools consume |
+
+## License
+
+MIT
 
 ---
 
-## 这套插件
+# 中文文档
+
+### 这套插件
 
 | 插件 | 作用 | 依赖 |
 |---|---|---|
@@ -21,7 +48,7 @@
 
 > 除 qzone 外，其余插件都不依赖任何 IM 网关——任何 MCP 客户端（DSH / Claude / Cursor）都能直接接。
 
-## 它解决什么问题
+### 它解决什么问题
 
 做角色 AI / 群机器人时，「这个人是谁、能不能跟他开玩笑、能不能动他空间」通常散落在三四个地方：
 桥接的白名单、提示词里的人物备注、某段硬编码的分档。
@@ -38,7 +65,7 @@ roster.json → 谁能私聊我 / 谁能看我空间 / 谁只能正经说话
 
 ---
 
-## 30 秒上手
+### 30 秒上手
 
 > **本项目没有发布到 npm，而且 npm 上的 `mcp-roster` 是别人的包**
 > ——`npx mcp-roster` 会装到不相干的东西上，别用。
@@ -74,7 +101,7 @@ ROSTER_FILE=~/.dsh/roster.json node src/index.js
 
 ---
 
-## 接入 DSH（10 分钟）
+### 接入 DSH（10 分钟）
 
 名册是标准 MCP stdio 服务，任何 MCP 客户端都能接。DSH 的配置：
 
@@ -99,7 +126,7 @@ ROSTER_FILE=~/.dsh/roster.json node src/index.js
 > 名册不依赖任何 IM 网关；QQ / Telegram / Discord 的桥接都可以把它当权限来源，
 > 也可以完全不用桥接，只在 DSH 里当人物记忆用。
 
-## 七个工具
+### 七个工具
 
 | 工具 | 作用 |
 |---|---|
@@ -113,9 +140,9 @@ ROSTER_FILE=~/.dsh/roster.json node src/index.js
 
 ---
 
-## 核心机制
+### 核心机制
 
-### 1. 数据模型：分档 + 权限 + 语气
+#### 1. 数据模型：分档 + 权限 + 语气
 
 ```json
 {
@@ -146,24 +173,24 @@ ROSTER_FILE=~/.dsh/roster.json node src/index.js
 
 **默认拒绝**：不在 `perms` 里显式写 `true`，就是没权限。
 
-### 2. 为什么是「覆盖式」权限
+#### 2. 为什么是「覆盖式」权限
 
 `roster_upsert` 传了 `perms` 就**整体替换**，不做合并。
 合并看起来方便，代价是**撤销权限非常难**——你永远不知道某个 true 是哪次调用留下的。
 
-### 3. 原子写 + 坏文件退回空名册
+#### 3. 原子写 + 坏文件退回空名册
 
 - 写：临时文件 + `rename`，写一半断电不会得到半个 JSON
 - 读：文件坏了就**退回空名册**（宁可所有人没权限，也不要服务起不来）
 - 每次操作重读文件：多进程共用一份名册，避免内存态互相覆盖
 
-### 4. 只登记私聊好友
+#### 4. 只登记私聊好友
 
 群成员是动态的，不该混进「我认识谁」。群里的互动走桥接自己的逻辑。
 
 ---
 
-## 别的工具怎么用它
+### 别的工具怎么用它
 
 **方式一：MCP 调用**
 
@@ -189,7 +216,7 @@ const { uins } = await callTool('roster_allowlist', { scope: 'qzone' });
 
 ---
 
-## 从桥接迁移
+### 从桥接迁移
 
 如果你已经有 `friends.json`：
 
@@ -207,7 +234,7 @@ node scripts/import-friends.mjs /opt/qq-bridge/state/friends.json --owner 你的
 
 ---
 
-## 实测数据
+### 实测数据
 
 | 层 | 结果 |
 |---|---|
@@ -217,7 +244,7 @@ node scripts/import-friends.mjs /opt/qq-bridge/state/friends.json --owner 你的
 
 ---
 
-## 兼容范围
+### 兼容范围
 
 | 项 | 要求 | 实测 |
 |---|---|---|
@@ -229,7 +256,7 @@ node scripts/import-friends.mjs /opt/qq-bridge/state/friends.json --owner 你的
 
 ---
 
-## 设计取舍
+### 设计取舍
 
 | 决定 | 为什么 |
 |---|---|
@@ -242,7 +269,7 @@ node scripts/import-friends.mjs /opt/qq-bridge/state/friends.json --owner 你的
 
 ---
 
-## 自测与开发
+### 自测与开发
 
 ```bash
 node --test                     # 单测 10 项
@@ -260,6 +287,12 @@ test/          node:test
 
 ---
 
-## 许可
+### 许可
 
 MIT © 2026 HOHOLI
+
+---
+
+## 检索关键词（给搜索引擎）
+
+人物名册 · 权限 · 默认拒绝 · 白名单 · AI agent memory
