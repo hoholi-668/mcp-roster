@@ -1,4 +1,5 @@
 # mcp-roster
+[![npm](https://img.shields.io/npm/v/mcp-person-roster.svg)](https://www.npmjs.com/package/mcp-person-roster)
 
 <p>
   <a href="https://github.com/hoholi-668/mcp-roster/actions"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/hoholi-668/mcp-roster/test.yml?branch=main&label=CI&style=flat-square"></a>
