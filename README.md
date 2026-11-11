@@ -74,6 +74,31 @@ ROSTER_FILE=~/.dsh/roster.json node src/index.js
 
 ---
 
+## 接入 DSH（10 分钟）
+
+名册是标准 MCP stdio 服务，任何 MCP 客户端都能接。DSH 的配置：
+
+```yaml
+- id: mcp-roster
+  name: '@deepseek-ai/dsh-mcp-client'
+  config:
+    serverName: roster
+    transport: stdio
+    command: node
+    args: ['/绝对路径/mcp-roster/src/index.js']
+    env:
+      ROSTER_FILE: /root/.dsh/roster.json
+```
+
+**三步验证**：
+
+1. 重启 DSH，问「你认识谁」→ 应调用 `roster_list`
+2. 说「记住小王：同事，说话随便点」→ 应调用 `roster_upsert` / `roster_note`
+3. 打开 `ROSTER_FILE` 看 JSON 是否真的写进去了
+
+> 名册不依赖任何 IM 网关；QQ / Telegram / Discord 的桥接都可以把它当权限来源，
+> 也可以完全不用桥接，只在 DSH 里当人物记忆用。
+
 ## 七个工具
 
 | 工具 | 作用 |
